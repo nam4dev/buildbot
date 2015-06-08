@@ -20,6 +20,7 @@ import re
 import sys
 import warnings
 
+from types import MethodType
 from buildbot import interfaces
 from buildbot import locks
 from buildbot import util
@@ -827,6 +828,13 @@ class BuilderConfig(util_config.ConfiguredMixin):
         self.nextSlave = nextSlave
         if nextSlave and not callable(nextSlave):
             error('nextSlave must be a callable')
+
+        # Keeping support of the previous nextSlave API
+        if nextSlave and (nextSlave.func_code.co_argcount == 2 or
+                          (isinstance(nextSlave, MethodType) and
+                           nextSlave.func_code.co_argcount == 3)):
+            self.nextSlave = lambda x, y, z: nextSlave(x, y)
+
         self.nextBuild = nextBuild
         if nextBuild and not callable(nextBuild):
             error('nextBuild must be a callable')
