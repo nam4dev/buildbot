@@ -270,7 +270,7 @@ class Contact(base.StatusReceiver):
             args = args.encode('ascii')
         try:
             return shlex.split(args)
-        except ValueError, e:
+        except ValueError as e:
             raise UsageError(e)
 
     def command_HELLO(self, args):
@@ -869,6 +869,10 @@ class Contact(base.StatusReceiver):
         reactor.callLater(3.0, self.send, "(>^.^)>")
         reactor.callLater(3.5, self.send, "(7^.^)7")
         reactor.callLater(5.0, self.send, "(>^.^<)")
+
+    def command_HUSTLE(self, args):
+        self.act("does the hustle")
+    command_HUSTLE.usage = "dondon on #qutebrowser: qutebrowser-bb needs to learn to do the hustle"
 
     def command_SHUTDOWN(self, args):
         # FIXME: NEED TO THINK ABOUT!
